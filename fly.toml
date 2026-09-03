@@ -1,0 +1,26 @@
+app = "whatsapp-messenger"
+primary_region = "bom"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  PYTHONUNBUFFERED = "1"
+  LM_STUDIO_BASE_URL = "http://192.168.110.252:1234/v1"
+  LM_STUDIO_API_KEY = "not-needed"
+  MODEL_NAME = "openai/gpt-oss-20b"
+  MAX_TOKENS = "8000"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1

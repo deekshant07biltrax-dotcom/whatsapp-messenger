@@ -1,0 +1,21 @@
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5556
+ * Running on http://192.168.110.143:5556
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 559-221-175
+127.0.0.1 - - [01/Sep/2026 10:35:51] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 10:35:52] "GET /static/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 10:35:53] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [01/Sep/2026 10:44:13] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 10:44:13] "GET /static/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 10:44:14] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [01/Sep/2026 10:45:35] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 10:45:36] "GET /static/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 10:45:36] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [01/Sep/2026 10:47:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 10:47:25] "GET /static/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 10:47:25] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [01/Sep/2026 10:48:07] "GET / HTTP/1.1" 200 -

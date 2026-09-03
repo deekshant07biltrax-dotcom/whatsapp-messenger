@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biltrax — WhatsApp Message Creator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        burgundy: {
+                            50:  '#fdf2f4',
+                            100: '#fce7eb',
+                            200: '#f9d0d9',
+                            300: '#f4a8b8',
+                            400: '#ec7590',
+                            500: '#e04a6c',
+                            600: '#cc2d52',
+                            700: '#ac2043',
+                            800: '#7f1d35',
+                            900: '#5c1828',
+                            950: '#3a0d18',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#1a0a0f] text-gray-200 min-h-screen">
+
+    <!-- ─── LOGIN ─── -->
+    <div id="loginSection" class="flex items-center justify-center min-h-screen px-4">
+        <div class="w-full max-w-md">
+            <!-- Logo / Brand -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-burgundy-800 border border-burgundy-600 mb-4 shadow-lg shadow-burgundy-950">
+                    <svg class="w-8 h-8 text-burgundy-200" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.857L0 24l6.335-1.56A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.88 0-3.65-.49-5.19-1.345l-.37-.215-3.76.926.996-3.653-.241-.378A9.953 9.953 0 012 12C2 6.478 6.478 2 12 2s10 4.478 10 10-4.478 10-10 10z"/>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold text-white tracking-tight">Biltrax</h1>
+                <p class="text-burgundy-300 text-sm mt-1 tracking-widest uppercase">WhatsApp Message Creator</p>
+            </div>
+
+            <div class="bg-[#2a1018] border border-burgundy-800/60 rounded-2xl shadow-2xl shadow-burgundy-950/60 p-8">
+                <h2 class="text-lg font-semibold text-white mb-6">Sign in to continue</h2>
+                <form id="loginForm" class="space-y-5">
+                    <div>
+                        <label for="email" class="block text-xs font-medium text-burgundy-300 mb-2 uppercase tracking-wider">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="you@company.com"
+                            class="font-garamond text-sm bg-[#1a0a0f] border border-burgundy-800 text-gray-200 rounded-lg block w-full p-3 placeholder-gray-600
+                                   focus:ring-2 focus:ring-burgundy-600 focus:border-burgundy-600 outline-none transition duration-200">
+                    </div>
+                    <button type="submit"
+                        class="w-full py-3 px-4 rounded-lg text-sm font-semibold text-white bg-burgundy-700 hover:bg-burgundy-600
+                               focus:outline-none focus:ring-2 focus:ring-burgundy-500 focus:ring-offset-2 focus:ring-offset-[#2a1018]
+                               transition duration-200 shadow-md shadow-burgundy-950">
+                        Continue →
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── MAIN ─── -->
+    <div id="mainContent" class="hidden min-h-screen flex flex-col">
+
+        <!-- Header -->
+        <header class="border-b border-burgundy-900/60 bg-[#1f0c12]/80 backdrop-blur-sm sticky top-0 z-10">
+            <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-burgundy-800 border border-burgundy-600 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-burgundy-200" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.857L0 24l6.335-1.56A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.88 0-3.65-.49-5.19-1.345l-.37-.215-3.76.926.996-3.653-.241-.378A9.953 9.953 0 012 12C2 6.478 6.478 2 12 2s10 4.478 10 10-4.478 10-10 10z"/>
+                        </svg>
+                    </div>
+                    <span class="font-bold text-white text-base tracking-tight">Biltrax</span>
+                    <span class="text-burgundy-500 text-xs hidden sm:inline">/ WhatsApp Message Creator</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span id="headerEmail" class="text-xs text-gray-400"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Body -->
+        <main class="flex-1 max-w-7xl mx-auto w-full px-4 lg:px-6 py-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+
+                <!-- ── Input Panel ── -->
+                <div class="bg-[#2a1018]/70 border border-burgundy-900/50 rounded-2xl shadow-xl p-6 lg:p-8 flex flex-col gap-5">
+                    <div class="flex items-center gap-3 mb-1">
+                        <div class="w-1 h-6 rounded-full bg-burgundy-600"></div>
+                        <h2 class="text-base font-semibold text-white">Project Details</h2>
+                    </div>
+
+                    <form id="messageForm" class="flex flex-col gap-4">
+                        <input type="hidden" id="user_email" name="user_email">
+
+                        <!-- Message Type -->
+                        <div>
+                            <label class="block text-xs font-medium text-burgundy-300 mb-2 uppercase tracking-wider">Message Type</label>
+                            <div class="flex gap-3">
+                                <label class="flex-1 cursor-pointer">
+                                    <input type="radio" name="message_type" value="bx1" class="sr-only peer" checked>
+                                    <div class="text-center py-2.5 px-4 rounded-lg border border-burgundy-800 text-sm font-medium text-gray-400
+                                                peer-checked:bg-burgundy-800 peer-checked:border-burgundy-600 peer-checked:text-white
+                                                hover:border-burgundy-600 transition duration-200">
+                                        Bx1 &mdash; Real Estate
+                                    </div>
+                                </label>
+                                <label class="flex-1 cursor-pointer">
+                                    <input type="radio" name="message_type" value="bx2" class="sr-only peer">
+                                    <div class="text-center py-2.5 px-4 rounded-lg border border-burgundy-800 text-sm font-medium text-gray-400
+                                                peer-checked:bg-burgundy-800 peer-checked:border-burgundy-600 peer-checked:text-white
+                                                hover:border-burgundy-600 transition duration-200">
+                                        Bx2 &mdash; Industrial
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Link -->
+                        <div>
+                            <label for="link" class="block text-xs font-medium text-burgundy-300 mb-2 uppercase tracking-wider">Project Link</label>
+                            <input type="text" id="link" name="link" required placeholder="https://..."
+                                class="font-garamond text-sm bg-[#1a0a0f] border border-burgundy-900 text-gray-200 rounded-lg block w-full p-3 placeholder-gray-600
+                                       focus:ring-2 focus:ring-burgundy-600 focus:border-burgundy-600 outline-none transition duration-200">
+                        </div>
+
+                        <!-- Project Details -->
+                        <div>
+                            <label for="project_details" class="block text-xs font-medium text-burgundy-300 mb-2 uppercase tracking-wider">Project Details</label>
+                            <textarea id="project_details" name="project_details" rows="6" placeholder="Paste raw project details here..."
+                                class="font-garamond text-sm bg-[#1a0a0f] border border-burgundy-900 text-gray-200 rounded-lg block w-full p-3 placeholder-gray-600
+                                       focus:ring-2 focus:ring-burgundy-600 focus:border-burgundy-600 outline-none transition duration-200 resize-y"></textarea>
+                        </div>
+
+                        <!-- Companies & Contacts -->
+                        <div>
+                            <label for="companies_contacts" class="block text-xs font-medium text-burgundy-300 mb-2 uppercase tracking-wider">Companies &amp; Contacts</label>
+                            <textarea id="companies_contacts" name="companies_contacts" rows="6" placeholder="Companies, roles, contacts..."
+                                class="font-garamond text-sm bg-[#1a0a0f] border border-burgundy-900 text-gray-200 rounded-lg block w-full p-3 placeholder-gray-600
+                                       focus:ring-2 focus:ring-burgundy-600 focus:border-burgundy-600 outline-none transition duration-200 resize-y"></textarea>
+                        </div>
+
+                        <!-- Status -->
+                        <div>
+                            <label for="status" class="block text-xs font-medium text-burgundy-300 mb-2 uppercase tracking-wider">Status</label>
+                            <textarea id="status" name="status" rows="4" placeholder="Latest project status update..."
+                                class="font-garamond text-sm bg-[#1a0a0f] border border-burgundy-900 text-gray-200 rounded-lg block w-full p-3 placeholder-gray-600
+                                       focus:ring-2 focus:ring-burgundy-600 focus:border-burgundy-600 outline-none transition duration-200 resize-y"></textarea>
+                        </div>
+
+                        <!-- Additional Data -->
+                        <div>
+                            <label for="other_data" class="block text-xs font-medium text-burgundy-300 mb-2 uppercase tracking-wider">Additional Data</label>
+                            <textarea id="other_data" name="other_data" rows="3" placeholder="Any other relevant information..."
+                                class="font-garamond text-sm bg-[#1a0a0f] border border-burgundy-900 text-gray-200 rounded-lg block w-full p-3 placeholder-gray-600
+                                       focus:ring-2 focus:ring-burgundy-600 focus:border-burgundy-600 outline-none transition duration-200 resize-y"></textarea>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-lg text-sm font-semibold text-white
+                                   bg-burgundy-700 hover:bg-burgundy-600 active:bg-burgundy-800
+                                   focus:outline-none focus:ring-2 focus:ring-burgundy-500 focus:ring-offset-2 focus:ring-offset-[#2a1018]
+                                   transition duration-200 shadow-lg shadow-burgundy-950 mt-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            </svg>
+                            Generate Message
+                        </button>
+                    </form>
+                </div>
+
+                <!-- ── Output Panel ── -->
+                <div class="flex flex-col gap-4">
+
+                    <!-- Idle placeholder -->
+                    <div id="idlePlaceholder" class="flex-1 bg-[#2a1018]/40 border border-dashed border-burgundy-900/50 rounded-2xl flex flex-col items-center justify-center p-10 text-center">
+                        <div class="w-14 h-14 rounded-full bg-burgundy-900/50 flex items-center justify-center mb-4">
+                            <svg class="w-7 h-7 text-burgundy-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                            </svg>
+                        </div>
+                        <p class="text-sm text-gray-500">Your generated message will appear here.</p>
+                        <p class="text-xs text-gray-600 mt-1">Fill in the form and click Generate.</p>
+                    </div>
+
+                    <!-- Loading -->
+                    <div id="loadingSpinner" class="hidden flex-1 bg-[#2a1018]/70 border border-burgundy-900/50 rounded-2xl flex flex-col items-center justify-center p-10">
+                        <div class="relative w-14 h-14 mb-5">
+                            <div class="absolute inset-0 rounded-full border-2 border-burgundy-900"></div>
+                            <div class="absolute inset-0 rounded-full border-2 border-t-burgundy-500 animate-spin"></div>
+                        </div>
+                        <p id="loadingText" class="text-sm text-burgundy-300 text-center max-w-xs"></p>
+                    </div>
+
+                    <!-- Result -->
+                    <div id="resultContainer" class="hidden flex-1 bg-[#2a1018]/70 border border-burgundy-900/50 rounded-2xl flex flex-col overflow-hidden">
+                        <div class="flex items-center justify-between px-6 py-4 border-b border-burgundy-900/50">
+                            <div class="flex items-center gap-2">
+                                <div class="w-1 h-5 rounded-full bg-emerald-500"></div>
+                                <h2 class="text-sm font-semibold text-white">Generated Message</h2>
+                                <span id="messageTypeBadge" class="text-xs px-2 py-0.5 rounded-full bg-burgundy-900 text-burgundy-300 border border-burgundy-800"></span>
+                            </div>
+                            <button id="copyButton"
+                                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300
+                                       bg-[#1a0a0f] border border-burgundy-900 hover:border-burgundy-600 hover:text-white
+                                       transition duration-200">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
+                        <pre id="generatedMessage" class="font-garamond text-sm whitespace-pre-wrap flex-1 text-gray-300 p-6 overflow-auto leading-relaxed"></pre>
+                    </div>
+
+                    <!-- Error -->
+                    <div id="errorContainer" class="hidden bg-red-950/60 border border-red-800/60 rounded-2xl px-5 py-4" role="alert">
+                        <p class="text-sm font-semibold text-red-400 mb-1">Something went wrong</p>
+                        <p class="text-sm text-red-300" id="errorMessage"></p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+      $(document).ready(function () {
+
+        // ── Login ──
+        $('#loginForm').on('submit', function (e) {
+            e.preventDefault();
+            const email = $('#email').val();
+            if (email) {
+                $('#user_email').val(email);
+                $('#headerEmail').text(email);
+                $('#loginSection').addClass('hidden');
+                $('#mainContent').removeClass('hidden');
+            }
+        });
+
+        // ── Loading animation ──
+        let loadingTimeouts = [];
+
+        function startLoadingAnimation() {
+            const messages = [
+                "Understanding project details...",
+                "Going through company names & contacts...",
+                "Finding latest status...",
+                "Creating project message..."
+            ];
+            let delay = 0;
+            messages.forEach((msg, i) => {
+                let t = setTimeout(() => { $('#loadingText').text(msg); }, delay);
+                loadingTimeouts.push(t);
+                if (i < messages.length - 1) delay += 2000;
+            });
+        }
+
+        function stopLoadingAnimation() {
+            loadingTimeouts.forEach(t => clearTimeout(t));
+            loadingTimeouts = [];
+        }
+
+        // ── Submit ──
+        $('#messageForm').on('submit', function (e) {
+            e.preventDefault();
+            $('#idlePlaceholder').addClass('hidden');
+            $('#loadingSpinner').removeClass('hidden').addClass('flex');
+            $('#resultContainer').addClass('hidden').removeClass('flex');
+            $('#errorContainer').addClass('hidden');
+            startLoadingAnimation();
+
+            $.ajax({
+                url: '/create',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (response) {
+                    stopLoadingAnimation();
+                    handleResponse(response);
+                },
+                error: function (xhr) {
+                    stopLoadingAnimation();
+                    handleError(xhr);
+                }
+            });
+        });
+
+        function handleResponse(response) {
+            $('#loadingSpinner').addClass('hidden').removeClass('flex');
+            if (response.message) {
+                const type = $('input[name="message_type"]:checked').val().toUpperCase();
+                $('#messageTypeBadge').text(type);
+                $('#generatedMessage').text(response.message);
+                $('#resultContainer').removeClass('hidden').addClass('flex flex-col');
+            } else {
+                $('#errorMessage').text(response.error || 'An unknown error occurred.');
+                $('#errorContainer').removeClass('hidden');
+            }
+        }
+
+        function handleError(xhr) {
+            $('#loadingSpinner').addClass('hidden').removeClass('flex');
+            let msg = 'An unknown network error occurred.';
+            if (xhr.responseText) {
+                try { msg = JSON.parse(xhr.responseText).error || msg; }
+                catch (e) { msg = 'Failed to parse server response.'; }
+            }
+            $('#errorMessage').text(msg);
+            $('#errorContainer').removeClass('hidden');
+        }
+
+        // ── Copy ──
+        $('#copyButton').on('click', function () {
+            const text = $('#generatedMessage').text();
+            const btn = $(this);
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => showCopied(btn)).catch(() => fallbackCopy(text, btn));
+            } else {
+                fallbackCopy(text, btn);
+            }
+        });
+
+        function fallbackCopy(text, btn) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+            document.body.appendChild(ta);
+            ta.focus(); ta.select();
+            try { if (document.execCommand('copy')) showCopied(btn); } catch (e) {}
+            document.body.removeChild(ta);
+        }
+
+        function showCopied(btn) {
+            const orig = btn.html();
+            btn.html('<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Copied!');
+            btn.addClass('text-emerald-400 border-emerald-700');
+            setTimeout(() => { btn.html(orig); btn.removeClass('text-emerald-400 border-emerald-700'); }, 2000);
+        }
+
+      });
+    </script>
+</body>
+</html>
