@@ -7,6 +7,7 @@ import re
 import os
 
 app = Flask(__name__)
+IS_VERCEL = os.environ.get("VERCEL") == "1"
 
 LM_STUDIO_BASE_URL = os.environ.get("LM_STUDIO_BASE_URL", "http://192.168.110.252:1234/v1")
 LM_STUDIO_API_KEY = os.environ.get("LM_STUDIO_API_KEY", "not-needed")
@@ -16,6 +17,12 @@ MAX_TOKENS = int(os.environ.get("MAX_TOKENS", "8000"))
 client = OpenAI(base_url=LM_STUDIO_BASE_URL, api_key=LM_STUDIO_API_KEY)
 
 def setup_loggers():
+    # Vercel Functions have an ephemeral, read-only deployment filesystem.
+    # Keep the existing local/Fly file logs, but send deployment logs to stdout.
+    if IS_VERCEL:
+        logging.basicConfig(level=logging.INFO)
+        return
+
     # Create logs directory if it doesn't exist
     if not os.path.exists('logs'):
         os.makedirs('logs')
@@ -40,6 +47,56 @@ def setup_loggers():
         project_logger.addHandler(project_handler)
 
 setup_loggers()
+
+def log_generated_message(message, user_email, message_type):
+    """Keep existing file logs locally; use Vercel runtime logs when deployed."""
+    project_name_match = re.search(r"Project Name - \*(.*?)\*", message)
+    project_name = project_name_match.group(1).strip() if project_name_match else "Unknown Project"
+
+    if IS_VERCEL:
+        app.logger.info("Message generated: project=%s email=%s type=%s", project_name, user_email, message_type.upper())
+        return
+
+    # Log total message count
+    total_count_logger = logging.getLogger('count')
+    total_count = 1
+    total_count_log_path = 'logs/message_count.log'
+    if os.path.exists(total_count_log_path):
+        try:
+            with open(total_count_log_path, 'r') as f:
+                lines = f.readlines()
+                if lines:
+                    last_line = lines[-1]
+                    last_count = int(last_line.split(' - ')[1])
+                    total_count = last_count + 1
+        except (IOError, IndexError, ValueError):
+            total_count = 1
+    total_count_logger.info(total_count)
+
+    # Log daily message count
+    daily_count_log_filename = f"logs/{datetime.now().strftime('%Y-%m-%d')}_daily_count.log"
+    daily_count_logger = logging.getLogger('daily_count')
+    daily_count_logger.setLevel(logging.INFO)
+    for handler in daily_count_logger.handlers[:]:
+        daily_count_logger.removeHandler(handler)
+    daily_handler = logging.FileHandler(daily_count_log_filename)
+    daily_handler.setFormatter(logging.Formatter('%(asctime)s - %(message)s'))
+    daily_count_logger.addHandler(daily_handler)
+
+    daily_count = 1
+    if os.path.exists(daily_count_log_filename):
+        try:
+            with open(daily_count_log_filename, 'r') as f:
+                lines = f.readlines()
+                if lines:
+                    last_line = lines[-1]
+                    last_count = int(last_line.split(' - ')[1])
+                    daily_count = last_count + 1
+        except (IOError, IndexError, ValueError):
+            daily_count = 1
+    daily_count_logger.info(daily_count)
+
+    logging.getLogger('project').info(f"Project: {project_name} - Email: {user_email} - Type: {message_type.upper()}")
 
 def create_whatsapp_message(link, data, message_type='bx1'):
     """
@@ -274,55 +331,7 @@ def create():
 
         message = create_whatsapp_message(link, data, message_type)
 
-        # Log total message count
-        total_count_logger = logging.getLogger('count')
-        total_count = 1
-        total_count_log_path = 'logs/message_count.log'
-        if os.path.exists(total_count_log_path):
-            try:
-                with open(total_count_log_path, 'r') as f:
-                    lines = f.readlines()
-                    if lines:
-                        last_line = lines[-1]
-                        last_count = int(last_line.split(' - ')[1])
-                        total_count = last_count + 1
-            except (IOError, IndexError, ValueError):
-                total_count = 1
-        total_count_logger.info(total_count)
-
-        # Log daily message count
-        daily_count_log_filename = f"logs/{datetime.now().strftime('%Y-%m-%d')}_daily_count.log"
-        daily_count_logger = logging.getLogger('daily_count')
-        daily_count_logger.setLevel(logging.INFO)
-        
-        # Remove old handlers to ensure logging to the correct daily file
-        for handler in daily_count_logger.handlers[:]:
-            daily_count_logger.removeHandler(handler)
-            
-        daily_handler = logging.FileHandler(daily_count_log_filename)
-        daily_formatter = logging.Formatter('%(asctime)s - %(message)s')
-        daily_handler.setFormatter(daily_formatter)
-        daily_count_logger.addHandler(daily_handler)
-
-        daily_count = 1
-        if os.path.exists(daily_count_log_filename):
-            try:
-                with open(daily_count_log_filename, 'r') as f:
-                    lines = f.readlines()
-                    if lines:
-                        last_line = lines[-1]
-                        last_count = int(last_line.split(' - ')[1])
-                        daily_count = last_count + 1
-            except (IOError, IndexError, ValueError):
-                daily_count = 1
-        daily_count_logger.info(daily_count)
-
-        # Log project details
-        project_logger = logging.getLogger('project')
-        project_name_match = re.search(r"Project Name - \*(.*?)\*", message)
-        project_name = project_name_match.group(1).strip() if project_name_match else "Unknown Project"
-        
-        project_logger.info(f"Project: {project_name} - Email: {user_email} - Type: {message_type.upper()}")
+        log_generated_message(message, user_email, message_type)
 
         return jsonify({'message': message})
     except Exception as e:

@@ -1,0 +1,7 @@
+# Never commit deployment credentials or local AI-provider keys.
+.env
+.env.local
+
+# Local Python runtime files.
+__pycache__/
+*.pyc

@@ -1,0 +1,8 @@
+logs/
+.env.local
+__pycache__/
+*.pyc
+tunnel.py
+Dockerfile
+fly.toml
+.dockerignore
