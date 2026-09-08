@@ -9,7 +9,7 @@ Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has
 
 ## Solution: Update to Supported Model
 
-The model `llama-3.1-70b-versatile` has been decommissioned by Groq. Use `llama-3.3-70b-versatile` instead.
+The model `llama-3.1-70b-versatile` has been decommissioned by Groq. Use `llama-3.1-8b-instant` instead (this is available for free tier users).
 
 ## Correct Render Configuration
 
@@ -29,23 +29,25 @@ Update your Render web service with these settings:
 |-----|-------|
 | `LM_STUDIO_API_KEY` | `gsk_YOUR_ACTUAL_GROQ_KEY_HERE` ← Replace with your real Groq API key |
 | `LM_STUDIO_BASE_URL` | `https://api.groq.com/openai/v1` |
-| `MODEL_NAME` | `llama-3.3-70b-versatile` ← **UPDATED - This is the fix!** |
+| `MODEL_NAME` | `llama-3.1-8b-instant` ← **UPDATED - This is the fix!** |
 | `MAX_TOKENS` | `8000` |
 | `PYTHON_VERSION` | `3.11.0` |
 
 ## Important Notes
 
 1. **API Key**: Make sure to use your actual Groq API key, not the placeholder
-2. **Model Name**: Use `llama-3.3-70b-versatile` (not `llama-3.1-70b-versatile`)
-3. **Base URL**: Use `https://api.groq.com/openai/v1` for Groq AI
+2. **Model Name**: Use `llama-3.1-8b-instant` (this is available for free tier users)
+3. **Model Access**: Some models like `llama-3.3-70b-versatile` are enterprise-only and not available to free accounts
+4. **Base URL**: Use `https://api.groq.com/openai/v1` for Groq AI
 
 ## Alternative Models (If Needed)
 
-If you encounter issues with `llama-3.3-70b-versatile`, try these alternatives:
+If you encounter issues with `llama-3.1-8b-instant`, try these alternatives:
 
-- `llama-3.1-8b-instant` - Faster, smaller model
+- `llama3-70b-8192` - Meta Llama 3 70B (smaller context window)
 - `openai/gpt-oss-20b` - OpenAI's 20B model
 - `openai/gpt-oss-120b` - OpenAI's 120B model (more expensive)
+- `gemma2-9b-it` - Google's Gemma 2 9B model
 
 ## Verification Steps
 
@@ -67,8 +69,10 @@ If you encounter issues with `llama-3.3-70b-versatile`, try these alternatives:
 
 ### Still getting model errors?
 - Double-check the model name spelling
-- Ensure you're using `llama-3.3-70b-versatile` (with "3.3", not "3.1")
+- Ensure you're using `llama-3.1-8b-instant` (this is confirmed to work for free tier)
+- Avoid enterprise models like `llama-3.3-70b-versatile` (requires paid plan)
 - Check Groq's status page: https://status.groq.com
+- Verify your API key has proper permissions
 
 ### API Key errors?
 - Verify your API key is valid and not expired

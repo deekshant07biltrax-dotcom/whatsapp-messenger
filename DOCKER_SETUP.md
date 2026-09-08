@@ -31,7 +31,7 @@ Create a `.env` file in the project root (recommended):
 ```env
 LM_STUDIO_BASE_URL=https://api.groq.com/openai/v1
 LM_STUDIO_API_KEY=your_groq_api_key_here
-MODEL_NAME=llama-3.3-70b-versatile
+MODEL_NAME=llama-3.1-8b-instant
 MAX_TOKENS=8000
 ```
 
