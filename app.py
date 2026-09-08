@@ -9,9 +9,9 @@ import os
 app = Flask(__name__)
 IS_VERCEL = os.environ.get("VERCEL") == "1"
 
-LM_STUDIO_BASE_URL = os.environ.get("LM_STUDIO_BASE_URL", "http://192.168.110.252:1234/v1")
-LM_STUDIO_API_KEY = os.environ.get("LM_STUDIO_API_KEY", "not-needed")
-MODEL_NAME = os.environ.get("MODEL_NAME", "openai/gpt-oss-20b")
+LM_STUDIO_BASE_URL = os.environ.get("LM_STUDIO_BASE_URL", "https://api.groq.com/openai/v1")
+LM_STUDIO_API_KEY = os.environ.get("LM_STUDIO_API_KEY", "")
+MODEL_NAME = os.environ.get("MODEL_NAME", "llama-3.1-70b-versatile")
 MAX_TOKENS = int(os.environ.get("MAX_TOKENS", "8000"))
 
 client = OpenAI(base_url=LM_STUDIO_BASE_URL, api_key=LM_STUDIO_API_KEY)
